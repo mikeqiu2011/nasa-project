@@ -8,7 +8,7 @@ function getAllLaunches(req, res) {
 }
 
 function deleteLaunch(req, res) {
-    let id = req.params.id
+    let id = Number(req.params.id)
     console.log(id);
 
     if (!launchesModel.existsLaunchWithId(id)) {
