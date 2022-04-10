@@ -1,8 +1,8 @@
 const launches = new Map()
-let latestFlightNumber = 100
+let latestlaunchId = 100
 
 const launch = {
-    flightNumber: 100,
+    launchId: 100,
     mission: 'Kepler exploration X',
     rocket: 'Explorer IS1',
     launchDate: new Date('December 27, 2030'),
@@ -12,7 +12,11 @@ const launch = {
     success: true,
 }
 
-launches.set(launch.flightNumber, launch)
+launches.set(launch.launchId, launch)
+
+function existsLaunchWithId(launchId) {
+    return launches.has(launchId)
+}
 
 
 // works only with data, and define how the data is exported
@@ -20,12 +24,21 @@ function getAllLaunches() {
     return Array.from(launches.values())  // consumer does not need to care the details, just get a json back
 }
 
+function deleteLaunch(launchId) {
+    const launch = launches.get(launchId)
+    launch.upcoming = false // keep the record, just mark it as aborted
+    launch.success = false
+    // launches.delete(launchId)
+
+    return launch
+}
+
 function addLaunch(launch) {
-    latestFlightNumber++
+    latestlaunchId++
 
     // user only need to send necessary info, others can be cal by server
-    launches.set(latestFlightNumber, Object.assign(launch, {
-        flightNumber: latestFlightNumber,
+    launches.set(latestlaunchId, Object.assign(launch, {
+        launchId: latestlaunchId,
         customers: ['Mike', 'NAZA'],
         upcoming: true,
         success: true,
@@ -34,5 +47,7 @@ function addLaunch(launch) {
 
 module.exports = {
     getAllLaunches,
-    addLaunch
+    addLaunch,
+    deleteLaunch,
+    existsLaunchWithId,
 }

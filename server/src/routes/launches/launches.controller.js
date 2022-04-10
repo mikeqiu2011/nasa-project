@@ -7,6 +7,21 @@ function getAllLaunches(req, res) {
     return res.status(200).json(launchesModel.getAllLaunches())
 }
 
+function deleteLaunch(req, res) {
+    let id = req.params.id
+    console.log(id);
+
+    if (!launchesModel.existsLaunchWithId(id)) {
+        return res.status(404).json({ error: 'launch id not found' })
+    }
+
+    // id exists, now delete
+    const launch = launchesModel.deleteLaunch(id)
+
+    return res.status(200).json(launch)
+
+}
+
 function addLaunch(req, res) {
     let launch = req.body
 
@@ -28,5 +43,6 @@ function addLaunch(req, res) {
 
 module.exports = {
     getAllLaunches,
-    addLaunch
+    addLaunch,
+    deleteLaunch,
 }
