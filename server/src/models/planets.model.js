@@ -33,11 +33,15 @@ function loadPlanetsData() {
     })
 }
 
+function getAllPlanets() {
+    return habitablePlanet
+}
+
 
 // modules are exported and used before the data is properly loaded
 module.exports = {
     loadPlanetsData,
-    planets: habitablePlanet // rename the exports
+    getAllPlanets
 }
 
 /*
