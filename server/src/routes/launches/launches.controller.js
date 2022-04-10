@@ -9,14 +9,21 @@ function getAllLaunches(req, res) {
 
 function addLaunch(req, res) {
     let launch = req.body
-    if (launch) {
-        launch.launchDate = new Date(launch.launchDate)
-        launchesModel.addLaunch(launch)
 
-        return res.status(201).json(launch)
-    } else {
-        return res.status(400)
+    if (!launch.mission || !launch.rocket || !launch.launchDate
+        || !launch.destination) {
+        return res.status(400).json({ error: 'missing required launch property' })
     }
+
+    launch.launchDate = new Date(launch.launchDate)
+    if (isNaN(launch.launchDate)) { // Date obj will convert to unix timestamp and check
+        return res.status(400).json({ error: 'invalid launch date' })
+    }
+
+    launchesModel.addLaunch(launch)
+
+    return res.status(201).json(launch)
+
 }
 
 module.exports = {
