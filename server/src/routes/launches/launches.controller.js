@@ -7,6 +7,19 @@ function getAllLaunches(req, res) {
     return res.status(200).json(launchesModel.getAllLaunches())
 }
 
+function addLaunch(req, res) {
+    let launch = req.body
+    if (launch) {
+        launch.launchDate = new Date(launch.launchDate)
+        launchesModel.addLaunch(launch)
+
+        return res.status(201).json(launch)
+    } else {
+        return res.status(400)
+    }
+}
+
 module.exports = {
-    getAllLaunches
+    getAllLaunches,
+    addLaunch
 }
