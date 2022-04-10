@@ -3,6 +3,7 @@ const cors = require('cors')
 const path = require('path')
 const morgan = require('morgan')
 const planetsRouter = require('./routes/planets/planets.router')
+const launchesRouter = require('./routes/launches/launches.router')
 
 const app = express()
 
@@ -14,5 +15,6 @@ app.use(express.json())
 app.use(express.static(path.join(__dirname, '..', 'public')))
 
 app.use('/planets', planetsRouter) // now will get CORS blocked error
+app.use('/launches', launchesRouter) // now will get CORS blocked error
 
 module.exports = app
