@@ -14,7 +14,7 @@ const launch = {
 launches.set(launch.flightNumber, launch)
 
 function getAllLaunches() {
-    return Array.from(launches)
+    return Array.from(launches.values())  // consumer does not need to care the details, just get a json back
 }
 
 module.exports = {
