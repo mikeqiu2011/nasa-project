@@ -15,3 +15,9 @@
         "watch": "npm run server & npm run client",
         "test": "echo \"Error: no test specified\" && exit 1"
     }
+
+## production build and deploy of client
+    cd client && npm run build
+    http://localhost:8000/
+
+
