@@ -44,12 +44,10 @@ describe('Test POST /launches', () => {
     test('It should catch missing required properties', async () => {
         const resp = await request(app)
             .post('/launches')
-            .send({
-                mission: "ZTM115",
-                rocket: "mike expiriental IS1",
-                launchDate: "January 17, 2030",
-            })
+            .send(launchDataWithoutDate)
             .expect(400)
+
+        expect(resp.body).toStrictEqual({ error: 'missing required launch property' })
     })
 
     test('It should catch invalid dates', async () => {
