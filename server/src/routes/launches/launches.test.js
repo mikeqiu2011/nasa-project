@@ -13,8 +13,16 @@ describe('Test GET /launches', () => {
 
 
 describe('Test POST /launches', () => {
-    test('It should respond with 200', () => {
-
+    test('It should respond with success', async () => {
+        const resp = await request(app)
+            .post('/launches')
+            .send({
+                mission: "ZTM115",
+                rocket: "mike expiriental IS1",
+                launchDate: "January 17, 2030",
+                destination: "Kepler-189 f"
+            })
+            .expect(201)
     })
 
     test('It should catch missing required properties', () => {
