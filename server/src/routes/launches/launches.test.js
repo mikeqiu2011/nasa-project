@@ -26,6 +26,13 @@ describe('Test POST /launches', () => {
         destination: "Kepler-189 f"
     }
 
+    const launchDataWithInvalidDate = {
+        mission: "ZTM115",
+        rocket: "mike expiriental IS1",
+        launchDate: "hello",
+        destination: "Kepler-189 f"
+    }
+
     test('It should respond with success', async () => {
         const resp = await request(app)
             .post('/launches')
@@ -51,14 +58,13 @@ describe('Test POST /launches', () => {
     })
 
     test('It should catch invalid dates', async () => {
-        const resp = request(app)
+        const resp = await request(app)
             .post('/launches')
-            .send({
-                mission: "ZTM115",
-                rocket: "mike expiriental IS1",
-                launchDate: "hello",
-                destination: "Kepler-189 f"
-            })
+            .send(launchDataWithInvalidDate)
             .expect(400)
+
+        expect(resp.body).toStrictEqual({
+            error: 'invalid launch date'
+        })
     })
 })
