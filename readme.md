@@ -27,4 +27,8 @@
 ## http integration test using supertest
     npm i supertest --save-dev
 
+## using pm2 for production build
+    npm run deploy-cluster
+    now request may save to different server memory causing confusion
+
 
