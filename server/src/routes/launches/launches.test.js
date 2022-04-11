@@ -22,14 +22,30 @@ describe('Test POST /launches', () => {
                 launchDate: "January 17, 2030",
                 destination: "Kepler-189 f"
             })
+            .expect('Content-type', /json/)
             .expect(201)
     })
 
-    test('It should catch missing required properties', () => {
-
+    test('It should catch missing required properties', async () => {
+        const resp = await request(app)
+            .post('/launches')
+            .send({
+                mission: "ZTM115",
+                rocket: "mike expiriental IS1",
+                launchDate: "January 17, 2030",
+            })
+            .expect(400)
     })
 
-    test('It should catch invalid dates', () => {
-
+    test('It should catch invalid dates', async () => {
+        const resp = request(app)
+            .post('/launches')
+            .send({
+                mission: "ZTM115",
+                rocket: "mike expiriental IS1",
+                launchDate: "hello",
+                destination: "Kepler-189 f"
+            })
+            .expect(400)
     })
 })
