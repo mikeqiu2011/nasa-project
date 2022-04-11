@@ -20,4 +20,8 @@
     cd client && npm run build
     http://localhost:8000/
 
+## auto testing using Jest
+    npm i jest --save-dev
+    jest or npm test
+
 
