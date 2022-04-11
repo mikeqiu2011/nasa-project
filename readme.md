@@ -24,4 +24,7 @@
     npm i jest --save-dev
     jest or npm test
 
+## http integration test using supertest
+    npm i supertest --save-dev
+
 
