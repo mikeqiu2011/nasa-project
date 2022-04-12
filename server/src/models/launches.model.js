@@ -1,9 +1,9 @@
 // represent data access layer, hide details of Mongo or other dbms
 
-// const launches = require('./launches.mongo')
+const launches = require('./launches.mongo')
 
-const launches = new Map()
-let latestlaunchId = 100
+// const launches = new Map()
+// let latestlaunchId = 100
 
 const launch = {
     launchId: 100,
@@ -16,7 +16,16 @@ const launch = {
     success: true,
 }
 
-launches.set(launch.launchId, launch)
+async function saveLaunch(launch) {
+    await launches.updateOne({
+        launchId: launch.launchId
+    }, launch, {
+        upsert: true
+    })
+}
+
+saveLaunch(launch)
+// launches.set(launch.launchId, launch)
 
 function existsLaunchWithId(launchId) {
     return launches.has(launchId)
