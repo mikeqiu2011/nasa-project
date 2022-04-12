@@ -13,8 +13,8 @@ const launch = {
     mission: 'Kepler exploration X',
     rocket: 'Explorer IS1',
     launchDate: new Date('December 27, 2030'),
-    // destination: 'Kepler-1652 b',
-    destination: 'mike',  // now there is no integrity checking with planet collection
+    destination: 'Kepler-1652 b',
+    // destination: 'mike',  // now there is no integrity checking with planet collection
     customers: ['NASA', 'CITI'],
     upcoming: true,
     success: true,
@@ -36,7 +36,7 @@ async function saveLaunch(launch) {
 }
 
 
-async function getLatestFlightNumber() {
+async function getLatestLaunchId() {
     // const launches = await getAllLaunches()
     const latestLaunch = await launches.findOne({})
         .sort('-launchId')
@@ -47,9 +47,6 @@ async function getLatestFlightNumber() {
 
     return latestLaunch.launchId
 }
-
-// saveLaunch(launch)
-// launches.set(launch.launchId, launch)
 
 function existsLaunchWithId(launchId) {
     return launches.has(launchId)
@@ -62,7 +59,6 @@ async function getAllLaunches() {
         _id: 0,
         __v: 0
     })
-    // return Array.from(launches.values())  // consumer does not need to care the details, just get a json back
 }
 
 function deleteLaunch(launchId) {
@@ -74,17 +70,20 @@ function deleteLaunch(launchId) {
     return launch
 }
 
-function addLaunch(launch) {
-    latestlaunchId++
+async function addLaunch(launch) {
+    const launchId = await getLatestLaunchId() + 1
 
-    // user only need to send necessary info, others can be cal by server
-    launches.set(latestlaunchId, Object.assign(launch, {
-        launchId: latestlaunchId,
+    const newLaunch = Object.assign(launch, {
+        launchId: launchId,
         customers: ['Mike', 'NAZA'],
         upcoming: true,
         success: true,
-    }))
+    })
+
+    await saveLaunch(newLaunch)
 }
+
+saveLaunch(launch)
 
 module.exports = {
     getAllLaunches,
