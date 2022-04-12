@@ -7,22 +7,23 @@ async function getAllLaunches(req, res) {
     return res.status(200).json(await launchesModel.getAllLaunches())
 }
 
-function deleteLaunch(req, res) {
+async function deleteLaunch(req, res) {
     let id = Number(req.params.id)
     console.log(id);
 
-    if (!launchesModel.existsLaunchWithId(id)) {
+
+    if (! await launchesModel.existsLaunchWithId(id)) {
         return res.status(404).json({ error: 'launch id not found' })
     }
 
     // id exists, now delete
-    const launch = launchesModel.deleteLaunch(id)
+    const launch = await launchesModel.deleteLaunch(id)
 
     return res.status(200).json(launch)
 
 }
 
-function addLaunch(req, res) {
+async function addLaunch(req, res) {
     let launch = req.body
 
     if (!launch.mission || !launch.rocket || !launch.launchDate
@@ -35,7 +36,7 @@ function addLaunch(req, res) {
         return res.status(400).json({ error: 'invalid launch date' })
     }
 
-    launchesModel.addLaunch(launch)
+    await launchesModel.addLaunch(launch)
 
     return res.status(201).json(launch)
 

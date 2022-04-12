@@ -27,7 +27,7 @@ async function saveLaunch(launch) {
     if (!planet) {
         throw new Error('No matching planet found, save aborted')
     }
-    await launches.updateOne({
+    await launches.findOneAndUpdate({  // solves the "$setOnInsert" feedback problem
         launchId: launch.launchId
     }, launch, {
         upsert: true
@@ -48,8 +48,11 @@ async function getLatestLaunchId() {
     return latestLaunch.launchId
 }
 
-function existsLaunchWithId(launchId) {
-    return launches.has(launchId)
+async function existsLaunchWithId(launchId) {
+    const launch = await launches.findOne({
+        launchId: launchId
+    })
+    return launch != null
 }
 
 
@@ -61,10 +64,14 @@ async function getAllLaunches() {
     })
 }
 
-function deleteLaunch(launchId) {
-    const launch = launches.get(launchId)
+async function deleteLaunch(launchId) {
+    const launch = await launches.findOne({
+        launchId: launchId
+    })
     launch.upcoming = false // keep the record, just mark it as aborted
     launch.success = false
+
+    await saveLaunch(launch)
     // launches.delete(launchId)
 
     return launch
