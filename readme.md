@@ -31,4 +31,8 @@
     npm run deploy-cluster
     now request may save to different server memory causing confusion
 
+## mongoDB atlas and mongoose
+    https://cloud.mongodb.com/v2/6254e961c6f9c33040c8bd42#clusters
+    npm i mongoose
+
 
