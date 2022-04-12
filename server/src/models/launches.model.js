@@ -1,6 +1,7 @@
 // represent data access layer, hide details of Mongo or other dbms
 
 const launches = require('./launches.mongo')
+const planets = require('./planets.mongo')
 
 // const launches = new Map()
 // let latestlaunchId = 100
@@ -18,11 +19,18 @@ const launch = {
 }
 
 async function saveLaunch(launch) {
+    const planet = await planets.findOne({
+        keplerName: launch.destination
+    })
+    if (!planet) {
+        throw new Error('No matching planet found, save aborted')
+    }
     await launches.updateOne({
         launchId: launch.launchId
     }, launch, {
         upsert: true
     })
+
 }
 
 saveLaunch(launch)
