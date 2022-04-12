@@ -10,7 +10,8 @@ const launch = {
     mission: 'Kepler exploration X',
     rocket: 'Explorer IS1',
     launchDate: new Date('December 27, 2030'),
-    destination: 'Kepler-1652 b',
+    // destination: 'Kepler-1652 b',
+    destination: 'mike',  // now there is no integrity checking with planet collection
     customers: ['NASA', 'CITI'],
     upcoming: true,
     success: true,
@@ -34,7 +35,7 @@ function existsLaunchWithId(launchId) {
 
 // works only with data, and define how the data is exported
 async function getAllLaunches() {
-    return await await launches.find({}, {
+    return await launches.find({}, {
         _id: 0,
         __v: 0
     })
