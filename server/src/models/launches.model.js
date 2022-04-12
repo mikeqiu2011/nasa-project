@@ -1,3 +1,5 @@
+// represent data access layer, hide details of Mongo or other dbms
+
 // const launches = require('./launches.mongo')
 
 const launches = new Map()
