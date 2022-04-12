@@ -49,10 +49,9 @@ async function getLatestFlightNumber() {
 }
 
 async function existsLaunchWithId(flightNumber) {
-    const launch = await launches.findOne({
+    return await launches.findOne({
         flightNumber: flightNumber
     })
-    return launch != null
 }
 
 
@@ -65,16 +64,18 @@ async function getAllLaunches() {
 }
 
 async function deleteLaunch(flightNumber) {
+    const aborted = await launches.updateOne({
+        flightNumber: flightNumber
+    }, {
+        upcoming: false,
+        success: false
+    })  // we dont use upsert this time
+
     const launch = await launches.findOne({
         flightNumber: flightNumber
     })
-    launch.upcoming = false // keep the record, just mark it as aborted
-    launch.success = false
 
-    await saveLaunch(launch)
-    // launches.delete(launchId)
-
-    return launch
+    return aborted.acknowledged
 }
 
 async function addLaunch(launch) {
@@ -90,7 +91,7 @@ async function addLaunch(launch) {
     await saveLaunch(newLaunch)
 }
 
-saveLaunch(launch)
+// saveLaunch(launch)
 
 module.exports = {
     getAllLaunches,

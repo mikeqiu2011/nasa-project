@@ -10,16 +10,21 @@ async function getAllLaunches(req, res) {
 async function deleteLaunch(req, res) {
     let id = Number(req.params.id)
     console.log(id);
+    const existLaunch = await launchesModel.existsLaunchWithId(id)
 
-
-    if (! await launchesModel.existsLaunchWithId(id)) {
+    if (!existLaunch) {
         return res.status(404).json({ error: 'launch id not found' })
     }
 
     // id exists, now delete
-    const launch = await launchesModel.deleteLaunch(id)
+    const aborted = await launchesModel.deleteLaunch(id)
+    if (!aborted) {
+        return res.status(500).json({
+            error: 'unable to delete in server'
+        })
+    }
 
-    return res.status(200).json(launch)
+    return res.status(200).json({ ok: true })
 
 }
 
