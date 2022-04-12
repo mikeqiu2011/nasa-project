@@ -33,8 +33,12 @@ function existsLaunchWithId(launchId) {
 
 
 // works only with data, and define how the data is exported
-function getAllLaunches() {
-    return Array.from(launches.values())  // consumer does not need to care the details, just get a json back
+async function getAllLaunches() {
+    return await await launches.find({}, {
+        _id: 0,
+        __v: 0
+    })
+    // return Array.from(launches.values())  // consumer does not need to care the details, just get a json back
 }
 
 function deleteLaunch(launchId) {
