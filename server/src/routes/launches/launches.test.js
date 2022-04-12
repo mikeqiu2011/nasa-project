@@ -1,11 +1,15 @@
 const request = require('supertest')
 const app = require('../../app')
-const { mongoConnect } = require('../../services/mongo')
+const { mongoConnect, mongoDisconnect } = require('../../services/mongo')
 
 describe('Launches API', () => {  // wrap all sub tests into this parent test suit
 
     beforeAll(async () => {  // will run once before all sub tests
         await mongoConnect()
+    })
+
+    afterAll(async () => {
+        await mongoDisconnect()
     })
 
     describe('Test GET /launches', () => {
@@ -24,20 +28,20 @@ describe('Launches API', () => {  // wrap all sub tests into this parent test su
             mission: "ZTM115",
             rocket: "mike expiriental IS1",
             launchDate: "January 17, 2030",
-            destination: "Kepler-189 f"
+            destination: "Kepler-1410 b"
         }
 
         const launchDataWithoutDate = {
             mission: "ZTM115",
             rocket: "mike expiriental IS1",
-            destination: "Kepler-189 f"
+            destination: "Kepler-1410 b"
         }
 
         const launchDataWithInvalidDate = {
             mission: "ZTM115",
             rocket: "mike expiriental IS1",
             launchDate: "hello",
-            destination: "Kepler-189 f"
+            destination: "Kepler-1410 b"
         }
 
         test('It should respond with success', async () => {
