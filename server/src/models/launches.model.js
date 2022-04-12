@@ -3,13 +3,13 @@
 const launches = require('./launches.mongo')
 const planets = require('./planets.mongo')
 
-const DEFAULT_LAUNCHID = 100
+const DEFAULT_FLIGHTNUMBER = 100
 
 // const launches = new Map()
 // let latestlaunchId = 100
 
 const launch = {
-    launchId: 100,
+    flightNumber: 100,
     mission: 'Kepler exploration X',
     rocket: 'Explorer IS1',
     launchDate: new Date('December 27, 2030'),
@@ -28,7 +28,7 @@ async function saveLaunch(launch) {
         throw new Error('No matching planet found, save aborted')
     }
     await launches.findOneAndUpdate({  // solves the "$setOnInsert" feedback problem
-        launchId: launch.launchId
+        flightNumber: launch.flightNumber
     }, launch, {
         upsert: true
     })
@@ -36,21 +36,21 @@ async function saveLaunch(launch) {
 }
 
 
-async function getLatestLaunchId() {
+async function getLatestFlightNumber() {
     // const launches = await getAllLaunches()
     const latestLaunch = await launches.findOne({})
-        .sort('-launchId')
+        .sort('-flightNumber')
 
     if (!latestLaunch) {
-        return DEFAULT_LAUNCHID
+        return DEFAULT_FLIGHTNUMBER
     }
 
-    return latestLaunch.launchId
+    return latestLaunch.flightNumber
 }
 
-async function existsLaunchWithId(launchId) {
+async function existsLaunchWithId(flightNumber) {
     const launch = await launches.findOne({
-        launchId: launchId
+        flightNumber: flightNumber
     })
     return launch != null
 }
@@ -64,9 +64,9 @@ async function getAllLaunches() {
     })
 }
 
-async function deleteLaunch(launchId) {
+async function deleteLaunch(flightNumber) {
     const launch = await launches.findOne({
-        launchId: launchId
+        flightNumber: flightNumber
     })
     launch.upcoming = false // keep the record, just mark it as aborted
     launch.success = false
@@ -78,10 +78,10 @@ async function deleteLaunch(launchId) {
 }
 
 async function addLaunch(launch) {
-    const launchId = await getLatestLaunchId() + 1
+    const flightNumber = await getLatestFlightNumber() + 1
 
     const newLaunch = Object.assign(launch, {
-        launchId: launchId,
+        flightNumber: flightNumber,
         customers: ['Mike', 'NAZA'],
         upcoming: true,
         success: true,
