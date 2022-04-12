@@ -54,7 +54,10 @@ async function getAllPlanets() {
     //     keplerName: 'Kepler-62 f'  // filter only name matches
     // }, 'keplerName -anotherField') // return only necessary field
 
-    return await planets.find({}) // now will return all
+    return await planets.find({}, {
+        '_id': 0,
+        '__v': 0,
+    }) // now will return all
 }
 
 
