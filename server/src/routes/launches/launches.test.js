@@ -15,7 +15,7 @@ describe('Launches API', () => {  // wrap all sub tests into this parent test su
     describe('Test GET /launches', () => {
         test('It should respond with 200', async () => {
             const response = await request(app)
-                .get('/launches')
+                .get('/v1/launches')
                 .expect('Content-type', /json/)
                 .expect(200)
             // expect(response.statusCode).toBe(200)
@@ -46,7 +46,7 @@ describe('Launches API', () => {  // wrap all sub tests into this parent test su
 
         test('It should respond with success', async () => {
             const resp = await request(app)
-                .post('/launches')
+                .post('/v1/launches')
                 .send(completeLaunchData)
                 .expect('Content-type', /json/)
                 .expect(201)
@@ -61,7 +61,7 @@ describe('Launches API', () => {  // wrap all sub tests into this parent test su
 
         test('It should catch missing required properties', async () => {
             const resp = await request(app)
-                .post('/launches')
+                .post('/v1/launches')
                 .send(launchDataWithoutDate)
                 .expect(400)
 
@@ -70,7 +70,7 @@ describe('Launches API', () => {  // wrap all sub tests into this parent test su
 
         test('It should catch invalid dates', async () => {
             const resp = await request(app)
-                .post('/launches')
+                .post('/v1/launches')
                 .send(launchDataWithInvalidDate)
                 .expect(400)
 
