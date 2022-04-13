@@ -35,4 +35,30 @@
     https://cloud.mongodb.com/v2/6254e961c6f9c33040c8bd42#clusters
     npm i mongoose
 
+## spaceX API
+    https://github.com/r-spacex/SpaceX-API/blob/master/docs/README.md
+    https://app.getpostman.com/run-collection/ed4ed700dcc55b2c1f1c
+
+### populate data
+    https://api.spacexdata.com/v4/launches/query
+    {
+        "query": {},
+        "options": {
+            "populate": [
+                "rocket"
+            ]
+        }
+    }
+
+    or we can only populate the name:
+    "populate": [
+            {
+                "path": "rocket",
+                "select": {
+                    "name": 1
+                }
+            }
+        ]
+
+
 

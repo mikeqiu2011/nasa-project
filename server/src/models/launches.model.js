@@ -1,4 +1,5 @@
 // represent data access layer, hide details of Mongo or other dbms
+const axios = require('axios').default
 
 const launches = require('./launches.mongo')
 const planets = require('./planets.mongo')
@@ -9,15 +10,14 @@ const DEFAULT_FLIGHTNUMBER = 100
 // let latestlaunchId = 100
 
 const launch = {
-    flightNumber: 100,
-    mission: 'Kepler exploration X',
-    rocket: 'Explorer IS1',
-    launchDate: new Date('December 27, 2030'),
-    destination: 'Kepler-1652 b',
-    // destination: 'mike',  // now there is no integrity checking with planet collection
-    customers: ['NASA', 'CITI'],
-    upcoming: true,
-    success: true,
+    flightNumber: 100,  // flight_number
+    mission: 'Kepler exploration X',  // name
+    rocket: 'Explorer IS1',  //rocket.name
+    launchDate: new Date('December 27, 2030'), // date_local
+    destination: 'Kepler-1652 b', // NA
+    customers: ['NASA', 'CITI'],  //payloads.customers
+    upcoming: true, // upcoming
+    success: true, // success
 }
 
 async function saveLaunch(launch) {
@@ -91,11 +91,58 @@ async function addLaunch(launch) {
     await saveLaunch(newLaunch)
 }
 
-// saveLaunch(launch)
+const SPACEX_API_URL = 'https://api.spacexdata.com/v4/launches/query'
+async function loadLaunchData() {
+    console.log('Downloading launch data');
+    // fetch data from spaceX API
+    const res = await axios.post(SPACEX_API_URL, {
+        query: {},
+        options: {
+            populate: [
+                {
+                    path: "rocket",
+                    select: {
+                        name: 1
+                    }
+                },
+                {
+                    path: "payloads",
+                    select: {
+                        customers: 1
+                    }
+                }
+            ]
+        }
+    })
+
+    const launchDocs = res.data.docs
+    for (const launchDoc of launchDocs) {
+        const payloads = launchDoc.payloads
+        const customers = payloads.flatMap((payload) => {
+            return payload.customers
+        })
+
+        const launch = {
+            flightNumber: launchDoc.flight_number,
+            mission: launchDoc.name,
+            rocket: launchDoc.rocket.name,
+            launchDate: launchDoc.date_local,
+            destination: '', // NA
+            customers: customers,
+            upcoming: launchDoc.upcoming,
+            success: launchDoc.success
+        }
+
+        console.log(`${launch.flightNumber} ${launch.mission}`);
+    }
+
+
+}
 
 module.exports = {
     getAllLaunches,
     addLaunch,
     deleteLaunch,
     existsLaunchWithId,
+    loadLaunchData
 }
