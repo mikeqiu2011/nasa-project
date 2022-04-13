@@ -21,12 +21,7 @@ const launch = {
 }
 
 async function saveLaunch(launch) {
-    const planet = await planets.findOne({
-        keplerName: launch.destination
-    })
-    if (!planet) {
-        throw new Error('No matching planet found, save aborted')
-    }
+
     await launches.findOneAndUpdate({  // solves the "$setOnInsert" feedback problem
         flightNumber: launch.flightNumber
     }, launch, {
@@ -83,6 +78,12 @@ async function deleteLaunch(flightNumber) {
 }
 
 async function addLaunch(launch) {
+    const planet = await planets.findOne({
+        keplerName: launch.destination
+    })
+    if (!planet) {
+        throw new Error('No matching planet found, save aborted')
+    }
     const flightNumber = await getLatestFlightNumber() + 1
 
     const newLaunch = Object.assign(launch, {
@@ -109,8 +110,6 @@ async function loadLaunchData() {
     }
 
     await loadLaunchesFromSpaceX()
-
-
 }
 
 module.exports = {
@@ -146,6 +145,10 @@ async function loadLaunchesFromSpaceX() {
         }
     })
 
+    if (res.status != 200) {
+        throw new Error('launch data download failed')
+    }
+
     const launchDocs = res.data.docs
     for (const launchDoc of launchDocs) {
         const payloads = launchDoc.payloads
@@ -165,5 +168,7 @@ async function loadLaunchesFromSpaceX() {
         }
 
         console.log(`${launch.flightNumber} ${launch.mission} ${launch.customers}`)
+
+        await saveLaunch(launch)
     }
 }
