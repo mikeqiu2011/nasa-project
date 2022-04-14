@@ -59,7 +59,7 @@ async function getAllLaunches() {
     return await launches.find({}, {
         _id: 0,
         __v: 0
-    })
+    }).skip(10).limit(10)
 }
 
 async function deleteLaunch(flightNumber) {
