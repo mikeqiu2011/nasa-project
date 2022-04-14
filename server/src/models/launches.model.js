@@ -6,28 +6,13 @@ const planets = require('./planets.mongo')
 
 const DEFAULT_FLIGHTNUMBER = 100
 
-// const launches = new Map()
-// let latestlaunchId = 100
-
-const launch = {
-    flightNumber: 100,  // flight_number
-    mission: 'Kepler exploration X',  // name
-    rocket: 'Explorer IS1',  //rocket.name
-    launchDate: new Date('December 27, 2030'), // date_local
-    destination: 'Kepler-1652 b', // NA
-    customers: ['NASA', 'CITI'],  //payloads.customers
-    upcoming: true, // upcoming
-    success: true, // success
-}
 
 async function saveLaunch(launch) {
-
     await launches.findOneAndUpdate({  // solves the "$setOnInsert" feedback problem
         flightNumber: launch.flightNumber
     }, launch, {
         upsert: true
     })
-
 }
 
 
