@@ -55,11 +55,11 @@ async function existsLaunchWithId(flightNumber) {
 
 
 // works only with data, and define how the data is exported
-async function getAllLaunches() {
+async function getAllLaunches(limit, skip) {
     return await launches.find({}, {
         _id: 0,
         __v: 0
-    }).skip(10).limit(10)
+    }).skip(skip).limit(limit)
 }
 
 async function deleteLaunch(flightNumber) {
