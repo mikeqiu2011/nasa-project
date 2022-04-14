@@ -1,5 +1,6 @@
 const request = require('supertest')
 const app = require('../../app')
+require('dotenv').config() // also need load env before run test
 const { mongoConnect, mongoDisconnect } = require('../../services/mongo')
 
 describe('Launches API', () => {  // wrap all sub tests into this parent test suit
