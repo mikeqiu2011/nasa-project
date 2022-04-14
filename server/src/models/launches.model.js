@@ -59,7 +59,9 @@ async function getAllLaunches(limit, skip) {
     return await launches.find({}, {
         _id: 0,
         __v: 0
-    }).skip(skip).limit(limit)
+    })
+        .sort({ flightNumber: 1 })  // 1 is asc, -1 is dsc
+        .skip(skip).limit(limit)
 }
 
 async function deleteLaunch(flightNumber) {
