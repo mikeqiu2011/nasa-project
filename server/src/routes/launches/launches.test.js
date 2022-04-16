@@ -1,5 +1,6 @@
 const request = require('supertest')
 const app = require('../../app')
+const { loadPlanetsData } = require('../../models/planets.model')
 require('dotenv').config() // also need load env before run test
 const { mongoConnect, mongoDisconnect } = require('../../services/mongo')
 
@@ -7,6 +8,7 @@ describe('Launches API', () => {  // wrap all sub tests into this parent test su
 
     beforeAll(async () => {  // will run once before all sub tests
         await mongoConnect()
+        await loadPlanetsData()
     })
 
     afterAll(async () => {
